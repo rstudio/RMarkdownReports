@@ -1,0 +1,26 @@
+## Goal
+
+Which airport near New York City has the shortest departure delays on Saturday?
+
+## Motivation
+
+Airline passengers have choices when they choose to fly in to or out of New York City. Three major airports serve the area:
+
+* **JFK** - John F Kennedy International Airport
+* **LGA** - LaGuardia Airport
+* **EWR** - Newark Liberty International Airport
+
+How should passengers choose which airport to depart from? This study compares the airports on an obvious criteria: _departure delays_, the amount of time that passes between when a plane is scheduled to depart and when it actually departs. The amount of delay varies by ariport and fluctuates throughout the year, as seen in the graph below.
+
+Since passengers can normally plan which day of the week they travel on, we will condition our analysis on a single day of the week: Saturday.
+
+## Data
+
+We will examine all flights that originated from a New York City airport in 2013. The data is provided by the Bureau of Transportation Statistics (BTS) and is available for download from <http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236>.
+
+## Conclusion
+
+As the plot above shows, LaGuardia Airport had the shortest mean departure delay on Saturday, with a mean delay of 4.23 minutes.
+
+The complete results are in the table below.
+

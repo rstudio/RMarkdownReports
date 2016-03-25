@@ -1,0 +1,76 @@
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(nycflights13) # data
+library(dplyr)        # cleaning functions
+library(ggplot2)      # plotting functions
+library(lubridate)    # date-time processing
+
+dow <- "Saturday"
+
+delays <-
+  flights %>%
+  mutate(date = ymd(paste(year, month, day)), 
+         weekday = wday(date, label = TRUE, abbr = FALSE)) %>% 
+  select(origin, date, weekday, dep_delay) %>%
+  filter(!is.na(dep_delay))
+
+year <-
+  delays %>% 
+  group_by(origin, date) %>% 
+  summarise(mean_delay = mean(dep_delay))
+
+weekday <- 
+  delays %>%
+  filter(weekday == dow) %>%
+  group_by(origin) %>%
+  summarise(mean_delay = mean(dep_delay))
+```
+
+## Goal
+
+Which airport near New York City has the shortest departure delays on Saturday?
+
+## Motivation
+
+Airline passengers have choices when they choose to fly in to or out of New York City. Three major airports serve the area:
+
+* **JFK** - John F Kennedy International Airport
+* **LGA** - LaGuardia Airport
+* **EWR** - Newark Liberty International Airport
+
+How should passengers choose which airport to depart from? This study compares the airports on an obvious criteria: _departure delays_, the amount of time that passes between when a plane is scheduled to depart and when it actually departs. The amount of delay varies by ariport and fluctuates throughout the year, as seen in the graph below.
+
+```{r echo = FALSE}
+ggplot(year, aes(x = date, y = mean_delay, color = origin)) + 
+  geom_point(alpha = 0.2) +
+  geom_smooth(se = FALSE) +
+  ggtitle("Smoothed daily mean delays") + 
+  ylab("Mean delay (m)") + 
+  theme_bw()
+```
+
+
+Since passengers can normally plan which day of the week they travel on, we will condition our analysis on a single day of the week: Saturday.
+
+## Data
+
+We will examine all flights that originated from a New York City airport in 2013. The data is provided by the Bureau of Transportation Statistics (BTS) and is available for download from <http://www.transtats.bts.gov/DL_SelectFields.asp?Table_ID=236>.
+
+## Conclusion
+
+```{r echo = FALSE}
+ggplot(weekday, aes(x = origin)) + 
+  geom_bar(aes(weight = mean_delay)) +
+  ggtitle(paste("Expected", dow, "departure delay", sep = " ")) + 
+  ylab("Mean delay (m)") +
+  xlab("")
+```
+
+As the plot above shows, LaGuardia Airport had the shortest mean departure delay on Saturday, with a mean delay of 4.23 minutes.
+
+The complete results are in the table below.
+
+```{r echo = FALSE}
+weekday
+```
+
+
